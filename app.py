@@ -13,11 +13,36 @@ app = Flask(__name__)
 # Lista de monedas disponibles
 monedas_disponibles = ["CLP", "PEN", "COP", "EUR", "USD", "UYU" ,"ARS", "MXN", "BRL", "BOB" ]  # Agrega más monedas según sea necesario
 
+# solo moneda chilena y peruana 
+# Ruta para obtener los precios del dólar a CLP y PEN
+def obtener_precios_dolar():
+    url = f"{BASE_URL}{API_KEY}/latest/USD"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        precio_dolar_clp = data['conversion_rates']['CLP']
+        precio_dolar_pen = data['conversion_rates']['PEN']
+        return {'precio_dolar_clp': precio_dolar_clp, 'precio_dolar_pen': precio_dolar_pen}
+    else:
+        return {'error': 'No se pudieron obtener los precios del dólar'}
+
+# Decorador de contexto para ejecutar la función antes de manejar cualquier solicitud
+@app.context_processor
+def inject_precios_dolar():
+    precios_dolar = obtener_precios_dolar()
+    return dict(precio_dolar_clp=precios_dolar['precio_dolar_clp'], precio_dolar_pen=precios_dolar['precio_dolar_pen'])
+
+
+# fin de solo moneda chilena y peruana 
+
 @app.route('/', methods=['GET'])
 def mostrar_formulario():
-    return render_template('conversor.html', currencies=monedas_disponibles)
+    url = f"{BASE_URL}{API_KEY}/latest/USD"
+    response = requests.get(url)
+    data =response.json()
+    return render_template('conversor.html', currencies=monedas_disponibles, data=data)
 
-@app.route('/convertir', methods=['POST'])
+@app.route('/convertir', methods=['POST', 'GET'])
 def convertir_moneda():
     monto = float(request.form['monto'])
     moneda_origen = request.form['moneda_origen']
@@ -30,11 +55,13 @@ def convertir_moneda():
         data = response.json()
         conversion_rate = data['conversion_rates'][moneda_destino]
         resultado = monto * conversion_rate
-        return render_template('conversor.html', currencies=monedas_disponibles, resultado=f"{monto} {moneda_origen} equivale a {resultado:.3f} {moneda_destino}")
+        return render_template('conversor.html', data=data, currencies=monedas_disponibles, resultado=f"{monto} {moneda_origen} equivale a {resultado:.3f} {moneda_destino}")
     else:
-        return render_template('conversor.html', currencies=monedas_disponibles, resultado="Error al realizar la conversión")
+        return render_template('conversor.html', data=data, currencies=monedas_disponibles, resultado="Error al realizar la conversión")
 
-# Ruta para obtener datos de ExchangeRate-API
+
+
+# Ruta para obtener todos los datos de ExchangeRate-API
 @app.route('/datos-exchange', methods=['GET'])
 def obtener_datos_exchange():
     # URL de la API de ExchangeRate-API para el dólar como moneda base

@@ -1,37 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Conversor de Moneda</title>
-  </head>
-
-  <body>
-    <h1>Conversor de Moneda</h1>
-    <form action="/convertir" method="post">
-      <label for="monto">Monto:</label>
-      <input type="number" id="monto" name="monto" required /><br /><br />
-
-      <label for="moneda_origen">Moneda de Origen:</label>
-      <select id="moneda_origen" name="moneda_origen" required>
-        {% for currency in currencies %}
-        <option value="{{ currency }}">{{ currency }}</option>
-        {% endfor %}</select
-      ><br /><br />
-
-      <label for="moneda_destino">Moneda de Destino:</label>
-      <select id="moneda_destino" name="moneda_destino" required>
-        {% for currency in currencies %}
-        <option value="{{ currency }}">{{ currency }}</option>
-        {% endfor %}</select
-      ><br /><br />
-
-      <button type="submit">Convertir</button>
-    </form>
-
-    {% if resultado %}
-    <h2>Resultado:</h2>
-    <p>{{ resultado }}</p>
-    {% endif %}
-  </body>
-</html>
+{% extends "base.html" %} {% block principal %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title text-center">Conversor de Moneda</h1>
+          <form action="/convertir" method="post">
+            <div class="form-group">
+              <label for="monto">Monto:</label>
+              <input
+                type="number"
+                id="monto"
+                name="monto"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="moneda_origen">Moneda de Origen:</label>
+              <select
+                id="moneda_origen"
+                name="moneda_origen"
+                class="form-control"
+                required
+              >
+                {% for currency in currencies %}
+                <option value="{{ currency }}">{{ currency }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="moneda_destino">Moneda de Destino:</label>
+              <select
+                id="moneda_destino"
+                name="moneda_destino"
+                class="form-control"
+                required
+              >
+                {% for currency in currencies %}
+                <option value="{{ currency }}">{{ currency }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Convertir
+            </button>
+          </form>
+          {% if resultado %}
+          <h2 class="mt-4">Resultado:</h2>
+          <p>{{ resultado }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
