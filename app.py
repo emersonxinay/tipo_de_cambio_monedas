@@ -37,13 +37,15 @@ def inject_precios_dolar():
 
 @app.route('/', methods=['GET'])
 def mostrar_formulario():
+    title = "Conversor Moneda"
     url = f"{BASE_URL}{API_KEY}/latest/USD"
     response = requests.get(url)
     data =response.json()
-    return render_template('conversor.html', currencies=monedas_disponibles, data=data)
+    return render_template('conversor.html',  title=title, currencies=monedas_disponibles, data=data)
 
 @app.route('/convertir', methods=['POST', 'GET'])
 def convertir_moneda():
+    title = "Covirtiendo"
     monto = float(request.form['monto'])
     moneda_origen = request.form['moneda_origen']
     moneda_destino = request.form['moneda_destino']
@@ -55,15 +57,16 @@ def convertir_moneda():
         data = response.json()
         conversion_rate = data['conversion_rates'][moneda_destino]
         resultado = monto * conversion_rate
-        return render_template('conversor.html', data=data, currencies=monedas_disponibles, resultado=f"{monto} {moneda_origen} equivale a {resultado:.3f} {moneda_destino}")
+        return render_template('conversor.html', title=title, data=data, currencies=monedas_disponibles, resultado=f"{monto} {moneda_origen} equivale a {resultado:.3f} {moneda_destino}")
     else:
-        return render_template('conversor.html', data=data, currencies=monedas_disponibles, resultado="Error al realizar la conversión")
+        return render_template('conversor.html', title=title, data=data, currencies=monedas_disponibles, resultado="Error al realizar la conversión")
 
 
 
 # Ruta para obtener todos los datos de ExchangeRate-API
 @app.route('/datos-exchange', methods=['GET'])
 def obtener_datos_exchange():
+    title = "Todas las Monedas"
     # URL de la API de ExchangeRate-API para el dólar como moneda base
     url = f"{BASE_URL}{API_KEY}/latest/USD"
 
@@ -75,7 +78,7 @@ def obtener_datos_exchange():
         # Convierte la respuesta a formato JSON
         data = response.json()
         # Renderiza la plantilla HTML con los datos
-        return render_template('datos_exchange.html', data=data)
+        return render_template('datos_exchange.html', title=title, data=data)
     else:
         # Si la solicitud falla, devuelve un mensaje de error
         return jsonify({'error': 'No se pudieron obtener los datos de ExchangeRate-API'}), 500
