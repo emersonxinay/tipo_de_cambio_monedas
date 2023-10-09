@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Datos de ExchangeRate-API</title>
+  </head>
+
+  <body>
+    <h1>Datos de ExchangeRate-API</h1>
+    <p><strong>Base Code:</strong> {{ data.base_code }}</p>
+    <p>
+      <strong>Última Actualización:</strong> {{ data.time_last_update_utc }}
+    </p>
+    <h2>Tasas de Conversión:</h2>
+    <ul>
+      {% for currency, rate in data.conversion_rates.items() %}
+      <li><strong>{{ currency }}:</strong> {{ rate }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

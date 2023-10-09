@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conversor de Moneda</title>
+  </head>
+
+  <body>
+    <h1>Conversor de Moneda</h1>
+    <form action="/convertir" method="post">
+      <label for="monto">Monto:</label>
+      <input type="number" id="monto" name="monto" required /><br /><br />
+
+      <label for="moneda_origen">Moneda de Origen:</label>
+      <select id="moneda_origen" name="moneda_origen" required>
+        {% for currency in currencies %}
+        <option value="{{ currency }}">{{ currency }}</option>
+        {% endfor %}</select
+      ><br /><br />
+
+      <label for="moneda_destino">Moneda de Destino:</label>
+      <select id="moneda_destino" name="moneda_destino" required>
+        {% for currency in currencies %}
+        <option value="{{ currency }}">{{ currency }}</option>
+        {% endfor %}</select
+      ><br /><br />
+
+      <button type="submit">Convertir</button>
+    </form>
+
+    {% if resultado %}
+    <h2>Resultado:</h2>
+    <p>{{ resultado }}</p>
+    {% endif %}
+  </body>
+</html>
