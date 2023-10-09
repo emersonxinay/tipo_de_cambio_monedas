@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request
 import requests
 from dotenv import load_dotenv
 import os
+import datetime
 # Carga las variables de entorno desde el archivo .env
 load_dotenv()
 
@@ -57,7 +58,7 @@ def convertir_moneda():
         data = response.json()
         conversion_rate = data['conversion_rates'][moneda_destino]
         resultado = monto * conversion_rate
-        return render_template('conversor.html', title=title, data=data, currencies=monedas_disponibles, resultado=f"{monto} {moneda_origen} equivale a {resultado:.3f} {moneda_destino}")
+        return render_template('conversor.html', title=title, data=data, currencies=monedas_disponibles, resultado=f"{monto:,.3f} {moneda_origen}  ", resultado2 = f"{resultado:,.3f}  {moneda_destino}")
     else:
         return render_template('conversor.html', title=title, data=data, currencies=monedas_disponibles, resultado="Error al realizar la conversión")
 
