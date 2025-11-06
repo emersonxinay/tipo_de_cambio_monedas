@@ -1,8 +1,198 @@
+/* Variables de colores basadas en Bootstrap */
+:root {
+  --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  --info-gradient: linear-gradient(135deg, #0dcaf0 0%, #087990 100%);
+  --success-gradient: linear-gradient(135deg, #198754 0%, #0f5132 100%);
+  --danger-gradient: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+  --warning-gradient: linear-gradient(135deg, #ffc107 0%, #cc9a06 100%);
+  --dark-gradient: linear-gradient(135deg, #212529 0%, #343a40 100%);
+  --secondary-gradient: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  --purple-gradient: linear-gradient(135deg, #6f42c1 0%, #432874 100%);
+}
+
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, #1a1d23 0%, #2d3436 100%);
 }
+
 .content {
   flex: 1;
+}
+
+/* Estilos de degradados personalizados */
+.gradient-card {
+  background: var(--dark-gradient);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gradient-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+.gradient-primary {
+  background: var(--primary-gradient) !important;
+}
+
+.gradient-info {
+  background: var(--info-gradient) !important;
+}
+
+.gradient-success {
+  background: var(--success-gradient) !important;
+}
+
+.gradient-danger {
+  background: var(--danger-gradient) !important;
+}
+
+.gradient-warning {
+  background: var(--warning-gradient) !important;
+}
+
+.gradient-secondary {
+  background: var(--secondary-gradient) !important;
+}
+
+.gradient-purple {
+  background: var(--purple-gradient) !important;
+}
+
+/* Cards con degradados */
+.comparison-card {
+  background: var(--dark-gradient);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.comparison-card:hover {
+  border-color: rgba(13, 110, 253, 0.5);
+  box-shadow: 0 4px 20px rgba(13, 110, 253, 0.2);
+}
+
+.price-badge {
+  background: var(--info-gradient);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(13, 202, 240, 0.3);
+}
+
+.variation-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.variation-up {
+  background: var(--success-gradient);
+}
+
+.variation-down {
+  background: var(--danger-gradient);
+}
+
+/* Navbar con degradado */
+.navbar {
+  background: var(--dark-gradient) !important;
+  border-bottom: 2px solid rgba(13, 110, 253, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer con degradado */
+footer {
+  background: var(--dark-gradient) !important;
+  border-top: 2px solid rgba(13, 110, 253, 0.3);
+}
+
+/* Botones con degradados */
+.btn-gradient-primary {
+  background: var(--primary-gradient);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+}
+
+.btn-gradient-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 110, 253, 0.6);
+  color: white;
+}
+
+.btn-gradient-success {
+  background: var(--success-gradient);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+}
+
+.btn-gradient-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(25, 135, 84, 0.6);
+  color: white;
+}
+
+/* Títulos con efecto de brillo */
+.title-gradient {
+  background: linear-gradient(135deg, #0dcaf0 0%, #0d6efd 50%, #6f42c1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+}
+
+/* Cards de moneda */
+.currency-header {
+  background: var(--primary-gradient);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+.currency-header-secondary {
+  background: var(--info-gradient);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(13, 202, 240, 0.3);
+}
+
+/* Efectos de animación */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Estilos para inputs */
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Alert con degradado */
+.alert-gradient {
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.2) 0%, rgba(111, 66, 193, 0.2) 100%);
+  border: 1px solid rgba(13, 110, 253, 0.4);
+  border-radius: 10px;
 }
