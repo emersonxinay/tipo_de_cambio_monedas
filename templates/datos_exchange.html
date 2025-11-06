@@ -1,40 +1,60 @@
 {% extends "base.html" %} {% block principal %}
 <div class="container mt-5">
-  <h1 class="mb-4">Datos de ExchangeRate-API</h1>
+  <div class="gradient-card text-white p-4">
+    <h1 class="mb-4 title-gradient text-center">
+      <i class="fas fa-globe"></i> Todas las Tasas de Cambio
+    </h1>
 
-  <div class="row">
-    <div class="col-md-6">
-      <h2>Información Básica</h2>
-      <table class="table">
-        <tr>
-          <th>Base Code:</th>
-          <td>{{ data.base_code }}</td>
-        </tr>
-        <tr>
-          <th>Última Actualización:</th>
-          <td>{{ data.time_last_update_utc }}</td>
-        </tr>
-      </table>
-    </div>
+    <div class="row">
+      <div class="col-md-12 mb-4">
+        <div class="currency-header text-center">
+          <h2 class="mb-2 text-white">Información Básica</h2>
+        </div>
+        <div class="comparison-card">
+          <div class="row p-3">
+            <div class="col-md-6 mb-2">
+              <strong class="text-info">
+                <i class="fas fa-money-bill-wave"></i> Moneda Base:
+              </strong>
+              <span class="text-white ms-2">{{ data.base_code }}</span>
+            </div>
+            <div class="col-md-6 mb-2">
+              <strong class="text-info">
+                <i class="fas fa-clock"></i> Última Actualización:
+              </strong>
+              <span class="text-white ms-2">{{ data.time_last_update_utc }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div class="col-md-6">
-      <h2>Tasas de Conversión</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Moneda</th>
-            <th>Tasa</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for currency, rate in data.conversion_rates.items() %}
-          <tr>
-            <td>{{ currency }}</td>
-            <td>{{ rate }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="col-md-12">
+        <div class="currency-header-secondary text-center">
+          <h2 class="mb-2 text-white">
+            <i class="fas fa-chart-line"></i> Tasas de Conversión
+          </h2>
+        </div>
+        <div class="comparison-card">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover table-striped">
+              <thead>
+                <tr class="text-info">
+                  <th><i class="fas fa-flag"></i> Moneda</th>
+                  <th><i class="fas fa-chart-bar"></i> Tasa de Cambio</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for currency, rate in data.conversion_rates.items() %}
+                <tr>
+                  <td class="fw-bold text-white">{{ currency }}</td>
+                  <td class="text-white">{{ "%.6f"|format(rate) }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

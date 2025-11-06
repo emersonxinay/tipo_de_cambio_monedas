@@ -1,0 +1,256 @@
+{% extends "base.html" %} {% block principal %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="gradient-card text-white">
+        <div class="card-body">
+          <h1 class="card-title text-center title-gradient mb-4">Comparación Histórica del Dólar (USD)</h1>
+          <p class="text-center text-muted">Precio actual vs fechas anteriores</p>
+          <p class="text-center h6">
+            <span class="price-badge">
+              <i class="fas fa-calendar-alt"></i> Fecha actual: {{ fecha_actual }}
+            </span>
+          </p>
+
+          <!-- Comparación para Peso Chileno (CLP) -->
+          <div class="mt-5">
+            <div class="currency-header text-center">
+              <h2 class="mb-0 text-white">
+                <i class="fas fa-dollar-sign"></i> USD → Peso Chileno (CLP)
+              </h2>
+            </div>
+
+            <div class="row">
+              <!-- Precio Actual -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card gradient-warning">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-white">
+                      <i class="fas fa-star"></i> Precio Actual
+                    </h5>
+                    <p class="h3 text-white fw-bold">1 USD = {{ "%.2f"|format(comparaciones.CLP.actual) }} CLP</p>
+                    <small class="text-white-50">{{ fecha_actual }}</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hace 1 día -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-info">
+                      <i class="fas fa-clock"></i> Hace 1 día
+                    </h5>
+                    {% if comparaciones.CLP.ayer %}
+                    <p class="h4 text-white fw-bold">1 USD = {{ "%.2f"|format(comparaciones.CLP.ayer) }} CLP</p>
+                    <small class="text-white-50">{{ fecha_ayer }}</small>
+                    {% if comparaciones.CLP.var_ayer is defined %}
+                    <div class="mt-3">
+                      <span class="variation-badge {% if comparaciones.CLP.var_ayer > 0 %}variation-up{% else %}variation-down{% endif %}">
+                        {% if comparaciones.CLP.var_ayer > 0 %}
+                        <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(comparaciones.CLP.var_ayer) }}%
+                        {% else %}
+                        <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(comparaciones.CLP.var_ayer) }}%
+                        {% endif %}
+                      </span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-muted">No disponible</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hace 7 días -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-info">
+                      <i class="fas fa-calendar-week"></i> Hace 7 días
+                    </h5>
+                    {% if comparaciones.CLP.hace_7 %}
+                    <p class="h4 text-white fw-bold">1 USD = {{ "%.2f"|format(comparaciones.CLP.hace_7) }} CLP</p>
+                    <small class="text-white-50">{{ fecha_7 }}</small>
+                    {% if comparaciones.CLP.var_7 is defined %}
+                    <div class="mt-3">
+                      <span class="variation-badge {% if comparaciones.CLP.var_7 > 0 %}variation-up{% else %}variation-down{% endif %}">
+                        {% if comparaciones.CLP.var_7 > 0 %}
+                        <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(comparaciones.CLP.var_7) }}%
+                        {% else %}
+                        <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(comparaciones.CLP.var_7) }}%
+                        {% endif %}
+                      </span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-muted">No disponible</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hace 30 días -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-info">
+                      <i class="fas fa-calendar-alt"></i> Hace 30 días
+                    </h5>
+                    {% if comparaciones.CLP.hace_30 %}
+                    <p class="h4 text-white fw-bold">1 USD = {{ "%.2f"|format(comparaciones.CLP.hace_30) }} CLP</p>
+                    <small class="text-white-50">{{ fecha_30 }}</small>
+                    {% if comparaciones.CLP.var_30 is defined %}
+                    <div class="mt-3">
+                      <span class="variation-badge {% if comparaciones.CLP.var_30 > 0 %}variation-up{% else %}variation-down{% endif %}">
+                        {% if comparaciones.CLP.var_30 > 0 %}
+                        <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(comparaciones.CLP.var_30) }}%
+                        {% else %}
+                        <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(comparaciones.CLP.var_30) }}%
+                        {% endif %}
+                      </span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-muted">No disponible</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comparación para Sol Peruano (PEN) -->
+          <div class="mt-5">
+            <div class="currency-header-secondary text-center">
+              <h2 class="mb-0 text-white">
+                <i class="fas fa-dollar-sign"></i> USD → Sol Peruano (PEN)
+              </h2>
+            </div>
+
+            <div class="row">
+              <!-- Precio Actual -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card gradient-warning">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-white">
+                      <i class="fas fa-star"></i> Precio Actual
+                    </h5>
+                    <p class="h3 text-white fw-bold">1 USD = {{ "%.4f"|format(comparaciones.PEN.actual) }} PEN</p>
+                    <small class="text-white-50">{{ fecha_actual }}</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hace 1 día -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-info">
+                      <i class="fas fa-clock"></i> Hace 1 día
+                    </h5>
+                    {% if comparaciones.PEN.ayer %}
+                    <p class="h4 text-white fw-bold">1 USD = {{ "%.4f"|format(comparaciones.PEN.ayer) }} PEN</p>
+                    <small class="text-white-50">{{ fecha_ayer }}</small>
+                    {% if comparaciones.PEN.var_ayer is defined %}
+                    <div class="mt-3">
+                      <span class="variation-badge {% if comparaciones.PEN.var_ayer > 0 %}variation-up{% else %}variation-down{% endif %}">
+                        {% if comparaciones.PEN.var_ayer > 0 %}
+                        <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(comparaciones.PEN.var_ayer) }}%
+                        {% else %}
+                        <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(comparaciones.PEN.var_ayer) }}%
+                        {% endif %}
+                      </span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-muted">No disponible</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hace 7 días -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-info">
+                      <i class="fas fa-calendar-week"></i> Hace 7 días
+                    </h5>
+                    {% if comparaciones.PEN.hace_7 %}
+                    <p class="h4 text-white fw-bold">1 USD = {{ "%.4f"|format(comparaciones.PEN.hace_7) }} PEN</p>
+                    <small class="text-white-50">{{ fecha_7 }}</small>
+                    {% if comparaciones.PEN.var_7 is defined %}
+                    <div class="mt-3">
+                      <span class="variation-badge {% if comparaciones.PEN.var_7 > 0 %}variation-up{% else %}variation-down{% endif %}">
+                        {% if comparaciones.PEN.var_7 > 0 %}
+                        <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(comparaciones.PEN.var_7) }}%
+                        {% else %}
+                        <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(comparaciones.PEN.var_7) }}%
+                        {% endif %}
+                      </span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-muted">No disponible</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hace 30 días -->
+              <div class="col-md-6 mb-3">
+                <div class="comparison-card">
+                  <div class="card-body text-center">
+                    <h5 class="card-title text-info">
+                      <i class="fas fa-calendar-alt"></i> Hace 30 días
+                    </h5>
+                    {% if comparaciones.PEN.hace_30 %}
+                    <p class="h4 text-white fw-bold">1 USD = {{ "%.4f"|format(comparaciones.PEN.hace_30) }} PEN</p>
+                    <small class="text-white-50">{{ fecha_30 }}</small>
+                    {% if comparaciones.PEN.var_30 is defined %}
+                    <div class="mt-3">
+                      <span class="variation-badge {% if comparaciones.PEN.var_30 > 0 %}variation-up{% else %}variation-down{% endif %}">
+                        {% if comparaciones.PEN.var_30 > 0 %}
+                        <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(comparaciones.PEN.var_30) }}%
+                        {% else %}
+                        <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(comparaciones.PEN.var_30) }}%
+                        {% endif %}
+                      </span>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-muted">No disponible</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leyenda -->
+          <div class="alert-gradient mt-5 p-4 text-center" role="alert">
+            <h5 class="text-info mb-3">
+              <i class="fas fa-info-circle"></i> Guía de Lectura
+            </h5>
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <span class="variation-badge variation-up me-2">
+                  <i class="fas fa-arrow-up"></i> +2.5%
+                </span>
+                <small class="text-white">Dólar más caro hoy</small>
+              </div>
+              <div class="col-md-6 mb-2">
+                <span class="variation-badge variation-down me-2">
+                  <i class="fas fa-arrow-down"></i> -1.8%
+                </span>
+                <small class="text-white">Dólar más barato hoy</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

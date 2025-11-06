@@ -2,39 +2,55 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <div class="card bg-dark text-white">
+      <div class="gradient-card text-white">
         <div class="card-body">
-          <h1 class="card-title text-center text-white">Conversor de Moneda</h1>
+          <h1 class="card-title text-center title-gradient mb-4">
+            <i class="fas fa-exchange-alt"></i> Conversor de Moneda
+          </h1>
           <form action="/convertir" method="post">
-            <div class="form-group">
-              <label for="monto">Ingrese monto:</label>
-              <input type="number" id="monto" name="monto" class="form-control" required placeholder="Ingrese monto" />
+            <div class="form-group mb-3">
+              <label for="monto" class="text-white mb-2">
+                <i class="fas fa-coins"></i> Ingrese monto:
+              </label>
+              <input type="number" step="0.01" id="monto" name="monto" class="form-control" required placeholder="Ej: 100.00" />
             </div>
-            <div class="form-group">
-              <label for="moneda_origen">Moneda de Origen:</label>
+            <div class="form-group mb-3">
+              <label for="moneda_origen" class="text-white mb-2">
+                <i class="fas fa-flag"></i> Moneda de Origen:
+              </label>
               <select id="moneda_origen" name="moneda_origen" class="form-control" required>
                 {% for currency in currencies %}
                 <option value="{{ currency }}">{{ currency }}</option>
                 {% endfor %}
               </select>
             </div>
-            <div class="form-group">
-              <label for="moneda_destino">Moneda de Destino:</label>
+            <div class="form-group mb-3">
+              <label for="moneda_destino" class="text-white mb-2">
+                <i class="fas fa-flag-checkered"></i> Moneda de Destino:
+              </label>
               <select id="moneda_destino" name="moneda_destino" class="form-control" required>
                 {% for currency in currencies %}
                 <option value="{{ currency }}">{{ currency }}</option>
                 {% endfor %}
               </select>
             </div>
-            <button type="submit" class="btn btn-primary btn-block mt-2">
-              Convertir
+            <button type="submit" class="btn btn-gradient-primary btn-block w-100 mt-3 py-2">
+              <i class="fas fa-calculator"></i> Convertir
             </button>
           </form>
           {% if resultado %}
-          <h2 class="mt-4 text-center ">Resultado:</h2>
-          <p class="text-center h2 text-primary">{{ resultado }}</p>
-          <p class="text-center text-white">Equivale a: </p>
-          <p class="text-center h1 text-info"> {{resultado2}} </p>
+          <div class="mt-5 text-center">
+            <h2 class="text-info mb-3">
+              <i class="fas fa-check-circle"></i> Resultado:
+            </h2>
+            <div class="price-badge mb-3">
+              {{ resultado }}
+            </div>
+            <p class="text-white h5 mb-2">Equivale a:</p>
+            <div class="comparison-card gradient-info p-3">
+              <p class="h2 text-white fw-bold mb-0">{{resultado2}}</p>
+            </div>
+          </div>
           {% endif %}
         </div>
       </div>
