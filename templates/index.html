@@ -1,0 +1,648 @@
+{% extends "base.html" %}
+
+{% block principal %}
+<div class="container-fluid px-3 px-md-4">
+  <!-- Hero Section - Tasas Destacadas -->
+  <section id="hero" class="hero-section py-4 py-md-5">
+    <div class="row align-items-center mb-4">
+      <div class="col-12 text-center mb-4">
+        <h1 class="display-4 display-md-3 title-gradient fw-bold mb-2">
+          Conversor de Monedas en Tiempo Real
+        </h1>
+        <p class="lead text-white-50 mb-0">Tasas actualizadas y análisis histórico profesional</p>
+      </div>
+    </div>
+
+    <!-- Tasas Destacadas -->
+    <div class="row g-3 g-md-4 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="rate-card gradient-primary">
+          <div class="rate-icon">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="rate-info">
+            <small class="text-white-50 d-block">USD → CLP</small>
+            <h3 class="mb-0 fw-bold">{{ "%.2f"|format(comparaciones.CLP.actual) }}</h3>
+            {% if comparaciones.CLP.var_ayer is defined %}
+            <small class="badge-variation {% if comparaciones.CLP.var_ayer > 0 %}bg-success{% else %}bg-danger{% endif %} mt-1">
+              {{ "%.2f"|format(comparaciones.CLP.var_ayer) }}%
+            </small>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="rate-card gradient-info">
+          <div class="rate-icon">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="rate-info">
+            <small class="text-white-50 d-block">USD → PEN</small>
+            <h3 class="mb-0 fw-bold">{{ "%.4f"|format(comparaciones.PEN.actual) }}</h3>
+            {% if comparaciones.PEN.var_ayer is defined %}
+            <small class="badge-variation {% if comparaciones.PEN.var_ayer > 0 %}bg-success{% else %}bg-danger{% endif %} mt-1">
+              {{ "%.2f"|format(comparaciones.PEN.var_ayer) }}%
+            </small>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="rate-card gradient-success">
+          <div class="rate-icon">
+            <i class="fas fa-euro-sign"></i>
+          </div>
+          <div class="rate-info">
+            <small class="text-white-50 d-block">USD → EUR</small>
+            <h3 class="mb-0 fw-bold">{{ "%.4f"|format(data.conversion_rates.EUR) }}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="rate-card gradient-warning">
+          <div class="rate-icon">
+            <i class="fas fa-peso-sign"></i>
+          </div>
+          <div class="rate-info">
+            <small class="text-white-50 d-block">USD → MXN</small>
+            <h3 class="mb-0 fw-bold">{{ "%.2f"|format(data.conversion_rates.MXN) }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conversor Principal -->
+  <section id="conversor" class="conversor-section py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10 col-xl-8">
+        <div class="converter-card gradient-card">
+          <div class="card-body p-4 p-md-5">
+            <h2 class="text-center title-gradient mb-4">
+              <i class="fas fa-exchange-alt"></i> Conversor de Monedas
+            </h2>
+
+            <form action="/" method="post" id="converterForm">
+              <div class="row g-3">
+                <div class="col-12 col-md-4">
+                  <label for="monto" class="form-label text-white">
+                    <i class="fas fa-coins"></i> Monto
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    id="monto"
+                    name="monto"
+                    class="form-control form-control-lg"
+                    required
+                    placeholder="100.00"
+                    value="{{ monto if monto else '' }}"
+                  />
+                </div>
+
+                <div class="col-6 col-md-4">
+                  <label for="moneda_origen" class="form-label text-white">
+                    <i class="fas fa-flag"></i> De
+                  </label>
+                  <select id="moneda_origen" name="moneda_origen" class="form-select form-select-lg" required>
+                    {% for currency in currencies %}
+                    <option value="{{ currency }}" {% if moneda_origen == currency %}selected{% endif %}>
+                      {{ currency }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="col-6 col-md-4">
+                  <label for="moneda_destino" class="form-label text-white">
+                    <i class="fas fa-flag-checkered"></i> A
+                  </label>
+                  <select id="moneda_destino" name="moneda_destino" class="form-select form-select-lg" required>
+                    {% for currency in currencies %}
+                    <option value="{{ currency }}" {% if moneda_destino == currency %}selected{% endif %}>
+                      {{ currency }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-gradient-primary btn-lg w-100 mt-4 py-3">
+                <i class="fas fa-calculator"></i> Convertir y Analizar
+              </button>
+            </form>
+
+            <!-- Resultado de Conversión -->
+            {% if resultado_conversion %}
+            <div class="conversion-result mt-5 animate-fade-in">
+              <div class="result-header text-center mb-4">
+                <h3 class="text-white mb-3">
+                  <i class="fas fa-check-circle text-success"></i> Resultado de Conversión
+                </h3>
+              </div>
+
+              <div class="row g-3 align-items-center mb-4">
+                <div class="col-12 col-md-5">
+                  <div class="result-box text-center">
+                    <small class="text-white-50 d-block mb-2">Convertiste</small>
+                    <h2 class="text-info mb-0">{{ "%.2f"|format(monto) }} {{ moneda_origen }}</h2>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-2 text-center">
+                  <i class="fas fa-arrow-right fa-2x text-white-50 d-none d-md-inline"></i>
+                  <i class="fas fa-arrow-down fa-2x text-white-50 d-md-none"></i>
+                </div>
+
+                <div class="col-12 col-md-5">
+                  <div class="result-box result-main text-center gradient-success">
+                    <small class="text-white d-block mb-2">Obtienes Hoy</small>
+                    <h2 class="text-white fw-bold mb-0">{{ "%.2f"|format(resultado_conversion) }} {{ moneda_destino }}</h2>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gráfica de Conversión Histórica -->
+              {% if labels_grafica and datos_grafica %}
+              <div class="chart-container mt-4">
+                <h4 class="text-white text-center mb-3">
+                  <i class="fas fa-chart-line"></i> Evolución de la Tasa de Cambio
+                </h4>
+                <canvas id="conversionChart"></canvas>
+              </div>
+              {% endif %}
+
+              <!-- Análisis Histórico -->
+              {% if historico_conversion %}
+              <div class="historical-analysis mt-5">
+                <h4 class="text-white text-center mb-4">
+                  <i class="fas fa-history"></i> Análisis Histórico
+                </h4>
+                <div class="row g-3">
+                  {% for item in historico_conversion %}
+                  <div class="col-12 col-md-6 col-lg-4">
+                    <div class="historical-mini-card">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-white fw-bold">
+                          <i class="fas fa-calendar-alt"></i> Hace {{ item.nombre }}
+                        </span>
+                        <span class="badge bg-secondary">{{ item.fecha }}</span>
+                      </div>
+                      <div class="historical-value mb-2">
+                        <small class="text-white-50 d-block">Hubieras obtenido</small>
+                        <h5 class="text-warning mb-0">{{ "%.2f"|format(item.resultado) }} {{ moneda_destino }}</h5>
+                      </div>
+                      <div class="historical-diff text-center p-2 rounded {% if item.mejor_hoy %}bg-success-subtle{% else %}bg-danger-subtle{% endif %}">
+                        {% if item.mejor_hoy %}
+                        <small class="text-success fw-bold">
+                          <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(item.diferencia) }} ({{ "%.1f"|format(item.porcentaje) }}%)
+                        </small>
+                        {% else %}
+                        <small class="text-danger fw-bold">
+                          <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(item.diferencia) }} ({{ "%.1f"|format(item.porcentaje) }}%)
+                        </small>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gráficas de Tendencia -->
+  <section id="tendencias" class="tendencias-section py-5">
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 text-center">
+        <h2 class="title-gradient fw-bold mb-2">
+          <i class="fas fa-chart-area"></i> Tendencias Últimos 30 Días
+        </h2>
+        <p class="text-white-50">Visualiza cómo han variado las tasas de cambio</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Gráfica USD → CLP -->
+      <div class="col-12 col-lg-6">
+        <div class="chart-card gradient-card">
+          <div class="card-body p-4">
+            <h4 class="text-white mb-3 text-center">
+              <i class="fas fa-dollar-sign"></i> USD → Peso Chileno (CLP)
+            </h4>
+            <div class="chart-wrapper">
+              <canvas id="trendChartCLP"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfica USD → PEN -->
+      <div class="col-12 col-lg-6">
+        <div class="chart-card gradient-card">
+          <div class="card-body p-4">
+            <h4 class="text-white mb-3 text-center">
+              <i class="fas fa-dollar-sign"></i> USD → Sol Peruano (PEN)
+            </h4>
+            <div class="chart-wrapper">
+              <canvas id="trendChartPEN"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparaciones Rápidas -->
+  <section id="comparaciones" class="comparaciones-section py-5">
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 text-center">
+        <h2 class="title-gradient fw-bold mb-2">
+          <i class="fas fa-balance-scale"></i> Comparaciones Rápidas
+        </h2>
+        <p class="text-white-50">Variación del dólar en diferentes períodos</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- CLP Comparisons -->
+      <div class="col-12 col-lg-6">
+        <div class="comparison-grid gradient-card p-4">
+          <h4 class="text-white mb-4 text-center">
+            <i class="fas fa-flag"></i> USD → CLP
+          </h4>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="mini-comparison-card current">
+                <small class="text-white-50">Hoy</small>
+                <h5 class="text-white fw-bold mb-0">{{ "%.2f"|format(comparaciones.CLP.actual) }}</h5>
+              </div>
+            </div>
+            {% if comparaciones.CLP.ayer %}
+            <div class="col-6">
+              <div class="mini-comparison-card">
+                <small class="text-white-50">Ayer</small>
+                <h5 class="text-white mb-1">{{ "%.2f"|format(comparaciones.CLP.ayer) }}</h5>
+                {% if comparaciones.CLP.var_ayer is defined %}
+                <small class="{% if comparaciones.CLP.var_ayer > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ "%.2f"|format(comparaciones.CLP.var_ayer) }}%
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+            {% if comparaciones.CLP.hace_7 %}
+            <div class="col-6">
+              <div class="mini-comparison-card">
+                <small class="text-white-50">7 días atrás</small>
+                <h5 class="text-white mb-1">{{ "%.2f"|format(comparaciones.CLP.hace_7) }}</h5>
+                {% if comparaciones.CLP.var_7 is defined %}
+                <small class="{% if comparaciones.CLP.var_7 > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ "%.2f"|format(comparaciones.CLP.var_7) }}%
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+            {% if comparaciones.CLP.hace_30 %}
+            <div class="col-6">
+              <div class="mini-comparison-card">
+                <small class="text-white-50">30 días atrás</small>
+                <h5 class="text-white mb-1">{{ "%.2f"|format(comparaciones.CLP.hace_30) }}</h5>
+                {% if comparaciones.CLP.var_30 is defined %}
+                <small class="{% if comparaciones.CLP.var_30 > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ "%.2f"|format(comparaciones.CLP.var_30) }}%
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- PEN Comparisons -->
+      <div class="col-12 col-lg-6">
+        <div class="comparison-grid gradient-card p-4">
+          <h4 class="text-white mb-4 text-center">
+            <i class="fas fa-flag"></i> USD → PEN
+          </h4>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="mini-comparison-card current">
+                <small class="text-white-50">Hoy</small>
+                <h5 class="text-white fw-bold mb-0">{{ "%.4f"|format(comparaciones.PEN.actual) }}</h5>
+              </div>
+            </div>
+            {% if comparaciones.PEN.ayer %}
+            <div class="col-6">
+              <div class="mini-comparison-card">
+                <small class="text-white-50">Ayer</small>
+                <h5 class="text-white mb-1">{{ "%.4f"|format(comparaciones.PEN.ayer) }}</h5>
+                {% if comparaciones.PEN.var_ayer is defined %}
+                <small class="{% if comparaciones.PEN.var_ayer > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ "%.2f"|format(comparaciones.PEN.var_ayer) }}%
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+            {% if comparaciones.PEN.hace_7 %}
+            <div class="col-6">
+              <div class="mini-comparison-card">
+                <small class="text-white-50">7 días atrás</small>
+                <h5 class="text-white mb-1">{{ "%.4f"|format(comparaciones.PEN.hace_7) }}</h5>
+                {% if comparaciones.PEN.var_7 is defined %}
+                <small class="{% if comparaciones.PEN.var_7 > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ "%.2f"|format(comparaciones.PEN.var_7) }}%
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+            {% if comparaciones.PEN.hace_30 %}
+            <div class="col-6">
+              <div class="mini-comparison-card">
+                <small class="text-white-50">30 días atrás</small>
+                <h5 class="text-white mb-1">{{ "%.4f"|format(comparaciones.PEN.hace_30) }}</h5>
+                {% if comparaciones.PEN.var_30 is defined %}
+                <small class="{% if comparaciones.PEN.var_30 > 0 %}text-success{% else %}text-danger{% endif %}">
+                  {{ "%.2f"|format(comparaciones.PEN.var_30) }}%
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+// Configuración global de Chart.js
+Chart.defaults.color = '#fff';
+Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+// Gráfica de Tendencia CLP
+{% if datos_historicos_clp and labels_tendencia %}
+const ctxCLP = document.getElementById('trendChartCLP');
+if (ctxCLP) {
+  new Chart(ctxCLP, {
+    type: 'line',
+    data: {
+      labels: {{ labels_tendencia | tojson }},
+      datasets: [{
+        label: 'USD → CLP',
+        data: {{ datos_historicos_clp | tojson }},
+        borderColor: 'rgba(13, 202, 240, 1)',
+        backgroundColor: 'rgba(13, 202, 240, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: 'rgba(13, 202, 240, 1)',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 2,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#0dcaf0',
+          bodyColor: '#fff',
+          borderColor: 'rgba(13, 202, 240, 0.5)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false,
+          callbacks: {
+            label: function(context) {
+              return 'Tasa: ' + context.parsed.y.toFixed(2) + ' CLP';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: '#fff',
+            callback: function(value) {
+              return value.toFixed(0);
+            }
+          }
+        },
+        x: {
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: '#fff',
+            maxRotation: 45,
+            minRotation: 45
+          }
+        }
+      },
+      interaction: {
+        mode: 'nearest',
+        axis: 'x',
+        intersect: false
+      }
+    }
+  });
+}
+{% endif %}
+
+// Gráfica de Tendencia PEN
+{% if datos_historicos_pen and labels_tendencia %}
+const ctxPEN = document.getElementById('trendChartPEN');
+if (ctxPEN) {
+  new Chart(ctxPEN, {
+    type: 'line',
+    data: {
+      labels: {{ labels_tendencia | tojson }},
+      datasets: [{
+        label: 'USD → PEN',
+        data: {{ datos_historicos_pen | tojson }},
+        borderColor: 'rgba(111, 66, 193, 1)',
+        backgroundColor: 'rgba(111, 66, 193, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: 'rgba(111, 66, 193, 1)',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 2,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#6f42c1',
+          bodyColor: '#fff',
+          borderColor: 'rgba(111, 66, 193, 0.5)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false,
+          callbacks: {
+            label: function(context) {
+              return 'Tasa: ' + context.parsed.y.toFixed(4) + ' PEN';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: '#fff',
+            callback: function(value) {
+              return value.toFixed(2);
+            }
+          }
+        },
+        x: {
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: '#fff',
+            maxRotation: 45,
+            minRotation: 45
+          }
+        }
+      },
+      interaction: {
+        mode: 'nearest',
+        axis: 'x',
+        intersect: false
+      }
+    }
+  });
+}
+{% endif %}
+
+// Gráfica de Conversión Histórica
+{% if labels_grafica and datos_grafica %}
+const ctxConversion = document.getElementById('conversionChart');
+if (ctxConversion) {
+  new Chart(ctxConversion, {
+    type: 'bar',
+    data: {
+      labels: {{ labels_grafica | tojson }},
+      datasets: [{
+        label: 'Tasa de Cambio',
+        data: {{ datos_grafica | tojson }},
+        backgroundColor: function(context) {
+          const index = context.dataIndex;
+          const lastIndex = context.dataset.data.length - 1;
+          return index === lastIndex ? 'rgba(25, 135, 84, 0.8)' : 'rgba(13, 110, 253, 0.6)';
+        },
+        borderColor: function(context) {
+          const index = context.dataIndex;
+          const lastIndex = context.dataset.data.length - 1;
+          return index === lastIndex ? 'rgba(25, 135, 84, 1)' : 'rgba(13, 110, 253, 1)';
+        },
+        borderWidth: 2,
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 2.5,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#0d6efd',
+          bodyColor: '#fff',
+          borderColor: 'rgba(13, 110, 253, 0.5)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false,
+          callbacks: {
+            label: function(context) {
+              return 'Tasa: ' + context.parsed.y.toFixed(4);
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)'
+          },
+          ticks: {
+            color: '#fff'
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#fff'
+          }
+        }
+      }
+    }
+  });
+}
+{% endif %}
+
+// Smooth scroll después de conversión
+{% if resultado_conversion %}
+window.addEventListener('load', function() {
+  const resultSection = document.querySelector('.conversion-result');
+  if (resultSection) {
+    setTimeout(() => {
+      resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+  }
+});
+{% endif %}
+</script>
+{% endblock %}

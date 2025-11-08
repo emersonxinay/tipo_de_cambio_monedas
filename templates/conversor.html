@@ -56,5 +56,97 @@
       </div>
     </div>
   </div>
+
+  {% if historico %}
+  <!-- Sección de Comparación Histórica -->
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-10">
+      <div class="gradient-card text-white">
+        <div class="card-body">
+          <h2 class="text-center title-gradient mb-4">
+            <i class="fas fa-chart-line"></i> Análisis Histórico de Conversión
+          </h2>
+          <p class="text-center text-white-50 mb-4">
+            ¿Qué hubiera pasado si hubieras convertido {{ monto }} {{ moneda_origen }} a {{ moneda_destino }} en fechas anteriores?
+          </p>
+
+          <div class="row">
+            {% for item in historico %}
+            <div class="col-md-6 mb-4">
+              <div class="historical-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="mb-0 text-white">
+                    <i class="fas fa-calendar-alt"></i> {{ item.nombre }}
+                  </h5>
+                  <span class="badge bg-secondary">{{ item.fecha }}</span>
+                </div>
+
+                <div class="historical-content">
+                  <div class="row mb-3">
+                    <div class="col-6">
+                      <small class="text-white-50">Tasa de cambio:</small>
+                      <p class="h6 text-white mb-0">{{ "%.4f"|format(item.tasa) }}</p>
+                    </div>
+                    <div class="col-6">
+                      <small class="text-white-50">Resultado:</small>
+                      <p class="h6 text-white mb-0">{{ "%.2f"|format(item.resultado) }} {{ moneda_destino }}</p>
+                    </div>
+                  </div>
+
+                  <div class="difference-section p-3 rounded">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <small class="text-white-50">Diferencia vs. hoy:</small>
+                        {% if item.ganancia %}
+                        <p class="h5 mb-0 text-success">
+                          <i class="fas fa-arrow-up"></i> +{{ "%.2f"|format(item.diferencia) }} {{ moneda_destino }}
+                        </p>
+                        {% else %}
+                        <p class="h5 mb-0 text-danger">
+                          <i class="fas fa-arrow-down"></i> {{ "%.2f"|format(item.diferencia) }} {{ moneda_destino }}
+                        </p>
+                        {% endif %}
+                      </div>
+                      <div class="text-end">
+                        {% if item.ganancia %}
+                        <span class="variation-badge variation-up">
+                          +{{ "%.2f"|format(item.porcentaje) }}%
+                        </span>
+                        {% else %}
+                        <span class="variation-badge variation-down">
+                          {{ "%.2f"|format(item.porcentaje) }}%
+                        </span>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="mt-2">
+                      {% if item.ganancia %}
+                      <small class="text-success">
+                        <i class="fas fa-info-circle"></i> Hoy obtienes más {{ moneda_destino }} que {{ item.nombre }}
+                      </small>
+                      {% else %}
+                      <small class="text-warning">
+                        <i class="fas fa-info-circle"></i> {{ item.nombre|capitalize }} habrías obtenido más {{ moneda_destino }}
+                      </small>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="alert alert-gradient mt-4 text-white text-center">
+            <i class="fas fa-lightbulb"></i>
+            <strong>Nota:</strong> Este análisis muestra cómo han variado las tasas de cambio en el tiempo.
+            Los datos históricos te permiten entender las fluctuaciones del mercado de divisas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

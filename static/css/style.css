@@ -102,17 +102,110 @@ body {
   background: var(--danger-gradient);
 }
 
-/* Navbar con degradado */
+/* Navbar con degradado mejorado */
 .navbar {
   background: var(--dark-gradient) !important;
   border-bottom: 2px solid rgba(13, 110, 253, 0.3);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 1rem 0;
 }
 
-/* Footer con degradado */
+.navbar-brand {
+  font-size: 1.3rem;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: translateX(5px);
+  color: #0dcaf0 !important;
+}
+
+/* Rate badges en navbar */
+.rate-badge {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.rate-badge:hover {
+  border-color: rgba(13, 110, 253, 0.5);
+  background: rgba(13, 110, 253, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Enlaces de navegación personalizados */
+.nav-link-custom {
+  color: white !important;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: rgba(13, 110, 253, 0.1);
+  border: 1px solid rgba(13, 110, 253, 0.3);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.nav-link-custom:hover {
+  background: var(--primary-gradient);
+  border-color: rgba(13, 110, 253, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+}
+
+/* Footer con degradado mejorado */
 footer {
   background: var(--dark-gradient) !important;
   border-top: 2px solid rgba(13, 110, 253, 0.3);
+  padding: 2rem 0 !important;
+}
+
+/* Social icons en footer */
+.social-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  justify-content: end;
+}
+
+@media (max-width: 768px) {
+  .social-links {
+    justify-content: center;
+  }
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background: rgba(13, 110, 253, 0.2);
+  border: 1px solid rgba(13, 110, 253, 0.3);
+  border-radius: 50%;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.social-icon:hover {
+  background: var(--primary-gradient);
+  border-color: rgba(13, 110, 253, 0.6);
+  transform: translateY(-5px) rotate(5deg);
+  box-shadow: 0 6px 20px rgba(13, 110, 253, 0.5);
+  color: white;
+}
+
+.social-icon i {
+  transition: transform 0.3s ease;
+}
+
+.social-icon:hover i {
+  transform: scale(1.2);
 }
 
 /* Botones con degradados */
@@ -184,10 +277,40 @@ footer {
   animation: float 3s ease-in-out infinite;
 }
 
-/* Estilos para inputs */
+/* Estilos para inputs mejorados */
+.form-control {
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(13, 110, 253, 0.2);
+  transition: all 0.3s ease;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
 .form-control:focus {
   border-color: #0d6efd;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  background: white;
+  transform: translateY(-2px);
+}
+
+.form-control::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Mejoras en labels */
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Select mejorado */
+select.form-control {
+  cursor: pointer;
+}
+
+select.form-control:hover {
+  border-color: rgba(13, 110, 253, 0.5);
 }
 
 /* Alert con degradado */
@@ -195,4 +318,185 @@ footer {
   background: linear-gradient(135deg, rgba(13, 110, 253, 0.2) 0%, rgba(111, 66, 193, 0.2) 100%);
   border: 1px solid rgba(13, 110, 253, 0.4);
   border-radius: 10px;
+}
+
+/* Estilos para sección histórica */
+.historical-card {
+  background: linear-gradient(135deg, rgba(33, 37, 41, 0.95) 0%, rgba(52, 58, 64, 0.95) 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.historical-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(13, 110, 253, 0.5);
+  box-shadow: 0 8px 24px rgba(13, 110, 253, 0.3);
+}
+
+.historical-content {
+  margin-top: 1rem;
+}
+
+.difference-section {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+}
+
+.historical-card .badge {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Mejora de variación badges para mejor visibilidad */
+.variation-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-block;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  min-width: 80px;
+  text-align: center;
+}
+
+.variation-up {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+  color: white;
+}
+
+.variation-down {
+  background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);
+  color: white;
+}
+
+/* Animación suave para las cards históricas */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.historical-card {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* Mejora responsiva */
+@media (max-width: 768px) {
+  .historical-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .variation-badge {
+    font-size: 0.9rem;
+    min-width: 70px;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* Estilos para conversión rápida en comparación */
+.conversion-result-box {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid rgba(13, 110, 253, 0.3);
+  transition: all 0.3s ease;
+}
+
+.conversion-result-box:hover {
+  border-color: rgba(13, 110, 253, 0.6);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(13, 110, 253, 0.3);
+}
+
+/* Card de comparación histórica mejorada */
+.historical-comparison-card {
+  background: linear-gradient(135deg, rgba(33, 37, 41, 0.95) 0%, rgba(52, 58, 64, 0.95) 100%);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 2px solid rgba(13, 110, 253, 0.2);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.historical-comparison-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(13, 110, 253, 0.5);
+  box-shadow: 0 12px 32px rgba(13, 110, 253, 0.4);
+}
+
+.result-comparison {
+  margin-top: 1rem;
+}
+
+.past-result {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.difference-highlight {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.difference-highlight:hover {
+  border-color: rgba(13, 110, 253, 0.5);
+  background: rgba(13, 110, 253, 0.1);
+}
+
+/* Animaciones para resultado de conversión */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.conversion-result-box:first-child {
+  animation: slideInFromLeft 0.6s ease-out;
+}
+
+.conversion-result-box:last-child {
+  animation: slideInFromRight 0.6s ease-out;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .conversion-result-box {
+    margin-bottom: 1rem;
+  }
+
+  .historical-comparison-card {
+    margin-bottom: 1rem;
+  }
 }

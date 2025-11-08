@@ -1,5 +1,149 @@
 {% extends "base.html" %} {% block principal %}
 <div class="container mt-5">
+  <!-- Conversor Rápido -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <div class="gradient-card text-white">
+        <div class="card-body">
+          <h2 class="text-center title-gradient mb-4">
+            <i class="fas fa-calculator"></i> Conversor Rápido
+          </h2>
+          <form action="/comparacion" method="post">
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="monto" class="text-white mb-2">
+                  <i class="fas fa-coins"></i> Monto:
+                </label>
+                <input type="number" step="0.01" id="monto" name="monto" class="form-control"
+                       required placeholder="Ej: 100.00" value="{{ monto if monto else '' }}">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="moneda_origen" class="text-white mb-2">
+                  <i class="fas fa-flag"></i> De:
+                </label>
+                <select id="moneda_origen" name="moneda_origen" class="form-control" required>
+                  {% for currency in currencies %}
+                  <option value="{{ currency }}" {% if moneda_origen == currency %}selected{% endif %}>
+                    {{ currency }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="moneda_destino" class="text-white mb-2">
+                  <i class="fas fa-flag-checkered"></i> A:
+                </label>
+                <select id="moneda_destino" name="moneda_destino" class="form-control" required>
+                  {% for currency in currencies %}
+                  <option value="{{ currency }}" {% if moneda_destino == currency %}selected{% endif %}>
+                    {{ currency }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary btn-block w-100 mt-2 py-3">
+              <i class="fas fa-chart-line"></i> Convertir y Ver Análisis Histórico
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultado de la Conversión -->
+  {% if resultado_conversion %}
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-10">
+      <div class="gradient-card text-white">
+        <div class="card-body">
+          <h2 class="text-center title-gradient mb-4">
+            <i class="fas fa-check-circle"></i> Resultado de tu Conversión
+          </h2>
+          <div class="row align-items-center">
+            <div class="col-md-5 text-center">
+              <div class="conversion-result-box">
+                <small class="text-white-50">Convertiste:</small>
+                <h3 class="text-info mb-0">{{ "%.2f"|format(monto) }} {{ moneda_origen }}</h3>
+              </div>
+            </div>
+            <div class="col-md-2 text-center">
+              <i class="fas fa-arrow-right fa-3x text-white-50"></i>
+            </div>
+            <div class="col-md-5 text-center">
+              <div class="conversion-result-box gradient-success">
+                <small class="text-white">Obtienes HOY:</small>
+                <h3 class="text-white fw-bold mb-0">{{ "%.2f"|format(resultado_conversion) }} {{ moneda_destino }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Análisis Histórico de la Conversión -->
+          {% if historico_conversion %}
+          <div class="mt-5">
+            <h3 class="text-center text-white mb-4">
+              <i class="fas fa-history"></i> ¿Qué hubiera pasado si convirtieras en el pasado?
+            </h3>
+            <div class="row">
+              {% for item in historico_conversion %}
+              <div class="col-md-6 mb-4">
+                <div class="historical-comparison-card">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-white mb-0">
+                      <i class="fas fa-calendar-alt"></i> {{ item.nombre }}
+                    </h5>
+                    <span class="badge bg-secondary">{{ item.fecha }}</span>
+                  </div>
+
+                  <div class="result-comparison">
+                    <div class="past-result mb-3">
+                      <small class="text-white-50">Hubieras obtenido:</small>
+                      <h4 class="text-warning mb-0">{{ "%.2f"|format(item.resultado) }} {{ moneda_destino }}</h4>
+                    </div>
+
+                    <div class="difference-highlight p-3 rounded">
+                      {% if item.mejor_hoy %}
+                      <div class="text-center">
+                        <i class="fas fa-arrow-up fa-2x text-success mb-2"></i>
+                        <p class="text-success mb-2">
+                          <strong>HOY obtienes MÁS</strong>
+                        </p>
+                        <h4 class="text-success mb-0">
+                          +{{ "%.2f"|format(item.diferencia) }} {{ moneda_destino }}
+                        </h4>
+                        <span class="variation-badge variation-up mt-2">
+                          +{{ "%.2f"|format(item.porcentaje) }}%
+                        </span>
+                      </div>
+                      {% else %}
+                      <div class="text-center">
+                        <i class="fas fa-arrow-down fa-2x text-danger mb-2"></i>
+                        <p class="text-danger mb-2">
+                          <strong>{{ item.nombre|upper }} era MEJOR</strong>
+                        </p>
+                        <h4 class="text-danger mb-0">
+                          {{ "%.2f"|format(item.diferencia) }} {{ moneda_destino }}
+                        </h4>
+                        <span class="variation-badge variation-down mt-2">
+                          {{ "%.2f"|format(item.porcentaje) }}%
+                        </span>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Comparación USD Predeterminada -->
   <div class="row justify-content-center">
     <div class="col-md-10">
       <div class="gradient-card text-white">
